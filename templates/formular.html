@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Schuldenregister</title>
+        <a href="/logout"><button>Logout</button></a>
+        <a href="/index"><button>Zurück</button></a>
+    </head>
+    <body>
+        <main>
+            <h1>Eigene Schulden</h1>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Schuldner</th>
+                        <th>Gläubiger</th>
+                        <th>Betrag</th>
+                        <th>Datum</th>
+                        <th>Dringlichkeit</th>
+                        <th>Bezahlt?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for eintrag in eintraege %}
+                        <tr>
+                            <td>{{ eintrag["schuldner"] }}</td>
+                            <td>{{ eintrag["glaeubiger"] }}</td>
+                            <td>{{ eintrag["betrag"] }}</td>
+                            <td>{{ eintrag["datum"] }}</td>
+                            <td>{{ eintrag["dringlichkeit"] }}</td>
+                            <td>
+                                {% if eintrag["bezahlt"] %}
+                                    Ja
+                                {% else %}
+                                    Nein
+                                {% endif %}
+                            </td>
+                            <td><a href="/edit/{{ eintrag['id'] }}"><button>Bearbeiten</button></a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <h2>Schulden hinzufügen</h2>
+                <form action="/add" method="POST">
+                    <input type="text" name="schuldner" value="{{ session['name'] }}" readonly>
+                    <input type="text" name="glaeubiger" placeholder="Gläubiger" required>
+                    <input type="number" name="betrag" step="0.01" placeholder="Betrag" min="0" required>
+                    <input type="date" name="datum" required>
+                    <input type="number" name="dringlichkeit" min="1" max="5" required>
+                    <button type="submit">Hinzufügen</button>
+                </form>
+        </main>
+    </body>
+</html>

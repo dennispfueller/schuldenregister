@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schuldenregister</title>
+    <a href="/"><button>Zurück</button></a>
+</head>
+<body>
+    <h1>Registieren</h1>
+    <form action="/register" method="POST">
+        <input type="text" name="user" placeholder="Name" required value="{{ name or '' }}">
+        <input type="password" name="password1" placeholder="Passwort" required>
+        <input type="password" name="password2" placeholder="Passwort wiederholen" required>
+        <button type="submit">Registrieren</button>
+    </form>
+    {% if fehler %}
+            <p style="color: red;">{{ fehler }}</p>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Schuldenregister</title>
+        <a href="/"><button>Zurück</button></a>
+    </head>
+    <body>
+        <h1>Login</h1>
+        <form action="/login" method="POST">
+            <input type="text" name="user" placeholder="Name" required value="{{ name or '' }}">
+            <input type="password" name="password" placeholder="Passwort" required>
+            <button type="submit">Anmelden</button>
+        </form>
+        {% if fehler %}
+            <p style="color: red;">{{ fehler }}</p>
+        {% endif %}
+    </body>
+</html>
