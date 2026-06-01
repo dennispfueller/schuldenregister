@@ -2,13 +2,15 @@ import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from init_db import init_db
+import os
 
+DB_PATH = os.environ.get("DB_PATH", ".")
 
 app = Flask(__name__)
 app.secret_key = "superstarkespasswort"
 
 def get_db(db):
-    conn = sqlite3.connect(f"{db}.db")
+    conn = sqlite3.connect(f"{DB_PATH}/{db}.db")
     conn.row_factory = sqlite3.Row
     return conn
 
