@@ -119,6 +119,9 @@ def add():
         
         if (dringlichkeit < 1) or (dringlichkeit > 5):
             return render_template("formular.html", eintraege=eintraege, fehler="Dringlichkeit muss zwischen 1 und 5 liegen!")
+        
+        if (schuldner or glaeubiger) != session["name"]:
+            return render_template("formular.html", eintraege=eintraege, fehler="Schuldner oder Gläubiger muss deinen Namen enthalten!")
 
         conn = get_db("schulden")
         conn.execute("""
