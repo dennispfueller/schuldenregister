@@ -4,19 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Schuldenregister</title>
-    <a href="/add"><button>Zurück</button></a>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <form action="/edit/{{ eintraege['id'] }}" method="POST">
-        <input type="text" name="schuldner" value="{{ session['name'] }}" readonly>
-        <input type="text" name="glaeubiger" placeholder="Gläubiger" value="{{ eintraege['glaeubiger'] }}" required>
-        <input type="number" name="betrag" step="0.01" placeholder="Betrag" min="0" value="{{ eintraege['betrag'] }}" required>
-        <input type="date" name="datum" value="{{ eintraege['datum'] }}" required>
-        <input type="number" name="dringlichkeit" min="1" max="5" value="{{ eintraege['dringlichkeit'] }}" required>
-        <button type="submit">Speichern</button>
-    </form>
-    {% if fehler %}
-        <p style="color: red;">{{ fehler }}</p>
-    {% endif %}
+    <nav>
+        <span>Schuldenregister</span>
+        <div>
+            <a href="/index"><button>Zurück</button></a>
+            <a href="/logout"><button>Logout</button></a>
+        </div>
+    </nav>
+
+    <div class="form-edit">
+        <form action="/edit/{{ eintraege['id'] }}" method="POST">
+            <input type="text" name="schuldner" value="{{ session['name'] }}" readonly>
+            <input type="text" name="glaeubiger" placeholder="Gläubiger" value="{{ eintraege['glaeubiger'] }}" required>
+            <input type="number" name="betrag" step="0.01" placeholder="Betrag" min="0" value="{{ eintraege['betrag'] }}" required>
+            <input type="date" name="datum" value="{{ eintraege['datum'] }}" required>
+            <input type="number" name="dringlichkeit" min="1" max="5" value="{{ eintraege['dringlichkeit'] }}" required>
+            <button type="submit">Speichern</button>
+        </form>
+        {% if fehler %}
+            <p style="color: red;">{{ fehler }}</p>
+        {% endif %}
+    </div>
 </body>
 </html>

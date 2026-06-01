@@ -1,0 +1,213 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #15151d; /* #121212 */
+    color: #e0e0e0;
+    font-family: 'Inter', sans-serif;
+}
+
+.container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.landing {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    gap: 1rem;
+}
+
+.landing button {
+    width: 200px;
+    padding: 1rem;
+    font-size: 1.1rem;
+}
+
+h1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+}
+
+nav {
+    background-color: #1e1e2e;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav span {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+nav a {
+    color: #e0e0e0;
+    text-decoration: none;
+    margin-left: 1rem;
+}
+
+.tabelle-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+thead th {
+    position: sticky;
+    top: 0;
+    background-color: #1e1e2e;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+}
+
+.rechts {
+    text-align: right;
+}
+
+.mitte {
+    text-align: center;
+}
+
+th, td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #2a2a3e;
+}
+
+th {
+    background-color: #1e1e2e;
+    font-weight: 600;
+    color: #a0a0b0;
+}
+
+tbody tr:hover {
+    background-color: #1e1e2e;
+}
+
+button {
+    background-color: #3a3a5e;
+    color: #e0e0e0;
+    border: none;
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+}
+
+button:hover {
+    background-color: #4a4a7e;
+}
+
+a[href*="bezahlen"] button {
+    background-color: #2d6a4f;
+}
+
+a[href*="bezahlen"] button:hover {
+    background-color: #3a8a65;
+}
+
+a[href*="edit"] button {
+    background-color: #4a4a3e;
+}
+
+h2 {
+    margin-top: 2rem;
+}
+
+.card {
+    background-color: #1e1e2e;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-top: 1.5rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.form-login {
+    background-color: #1e1e2e;
+    padding: 1.5rem;
+    border-radius: 10px;
+    max-width: 400px;
+    margin: 5rem auto;
+}
+
+.form-edit {
+    background-color: #1e1e2e;
+    padding: 1.5rem;
+    border-radius: 10px;
+    max-width: 400px;
+    margin: 5rem auto;    
+}
+
+button[type="submit"] {
+    padding: 0.7rem 0.9rem;
+}
+
+input {
+    background-color: #2a2a3e;
+    color: #e0e0e0;
+    border: 1px solid #3a3a5e;
+    padding: 0.6rem 0.9rem;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+}
+
+input:focus {
+    outline: none;
+    border-color: #6060a0;
+}
+
+input[readonly] {
+    color: #a0a0b0;
+    cursor: not-allowed;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.fehler {
+    color: #e05050;
+    margin-top: 0.75rem;
+}
+
+.button-leaderboard {
+    margin-top: 1rem;
+}
+
+.button-index {
+    margin-top: 1rem;
+}

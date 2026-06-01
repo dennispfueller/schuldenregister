@@ -4,36 +4,47 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Schuldenregister</title>
-        <a href="/logout"><button>Logout</button></a>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
     </head>
-  <body>
-        <main>
+    <body>
+        <nav>
+            <span>Schuldenregister</span>
+            <div>
+                <a href="/logout"><button>Logout</button></a>
+            </div>
+        </nav>
+        <div class="container">
             <h1>Schuldenregister</h1>
             <h2>Schulden</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Schuldner</th>
-                        <th>Gläubiger</th>
-                        <th>Betrag</th>
-                        <th>Datum</th>
-                        <th>Dringlichkeit</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for eintrag in eintraege %}
+            <div class="tabelle-container">
+                <table>
+                    <thead>
                         <tr>
-                            <td>{{ eintrag["schuldner"] }}</td>
-                            <td>{{ eintrag["glaeubiger"] }}</td>
-                            <td>{{ eintrag["betrag"] }}</td>
-                            <td>{{ eintrag["datum"] }}</td>
-                            <td>{{ eintrag["dringlichkeit"] }}</td>
+                            <th>Schuldner</th>
+                            <th>Gläubiger</th>
+                            <th>Betrag</th>
+                            <th>Datum</th>
+                            <th>Dringlichkeit</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <a href="/add"><button>Schulden hinzufügen</button></a>
-            <a href="/leaderboard"><button>Rangliste anzeigen</button></a>
-        </main>
+                    </thead>
+                    <tbody>
+                        {% for eintrag in eintraege %}
+                            <tr>
+                                <td>{{ eintrag["schuldner"] }}</td>
+                                <td>{{ eintrag["glaeubiger"] }}</td>
+                                <td>{{ eintrag["betrag"] }}</td>
+                                <td>{{ eintrag["datum"] }}</td>
+                                <td>{{ eintrag["dringlichkeit"] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="button-index">
+                <a href="/add"><button>Schulden bearbeiten</button></a>
+                <a href="/leaderboard"><button>Rangliste anzeigen</button></a>
+            </div>
+        </div>
     </body>
 </html>

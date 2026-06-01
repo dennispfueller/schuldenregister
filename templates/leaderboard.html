@@ -4,37 +4,48 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Schuldenregister</title>
-        <a href="/logout"><button>Logout</button></a>
-        <a href="/index"><button>Zurück</button></a>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
-        <main>
+        <nav>
+            <span>Schuldenregister</span>
+            <div>
+                <a href="/index"><button>Zurück</button></a>
+                <a href="/logout"><button>Logout</button></a>
+            </div>
+        </nav>
+        <div class="container">
             <h1>Rangliste</h1>
-            <table>
-                <thead>
-                    <th>Platz</th>
-                    <th>{{ grouped_by }}</th>
-                    <th>Gesamtbetrag</th>
-                </thead>
-                <tbody>
-                    {% for eintrag in eintraege %}
-                        <tr>
-                            <td>{{ loop.index }}</td>
-                            {% if current_lb == "schuldner" %}
-                                <td>{{ eintrag["schuldner"] }}</td>
-                            {% else %}
-                                <td>{{ eintrag["glaeubiger"] }}</td>
-                            {% endif %}
-                            <td>{{ eintrag["gesamtbetrag"] }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% if current_lb == "schuldner" %}
-                <a href="/leaderboard?type=glaeubiger"><button>Rangliste umschalten</button></a>
-            {% else %}
-                <a href="/leaderboard?type=schuldner"><button>Rangliste umschalten</button></a>
-            {% endif %}
-        </main>
+            <div class="tabelle-container">
+                <table>
+                    <thead>
+                        <th>Platz</th>
+                        <th>{{ grouped_by }}</th>
+                        <th>Gesamtbetrag</th>
+                    </thead>
+                    <tbody>
+                        {% for eintrag in eintraege %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                {% if current_lb == "schuldner" %}
+                                    <td>{{ eintrag["schuldner"] }}</td>
+                                {% else %}
+                                    <td>{{ eintrag["glaeubiger"] }}</td>
+                                {% endif %}
+                                <td>{{ "%.2f"|format(eintrag["gesamtbetrag"])|replace(".", ",") }} €</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="button-leaderboard">
+                {% if current_lb == "schuldner" %}
+                    <a href="/leaderboard?type=glaeubiger"><button>Rangliste umschalten</button></a>
+                {% else %}
+                    <a href="/leaderboard?type=schuldner"><button>Rangliste umschalten</button></a>
+                {% endif %}
+            </div>
+        </div>
     </body>
 </html>
+

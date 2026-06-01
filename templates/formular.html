@@ -4,56 +4,67 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Schuldenregister</title>
-        <a href="/logout"><button>Logout</button></a>
-        <a href="/index"><button>Zurück</button></a>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
-        <main>
+        <nav>
+            <span>Schuldenregister</span>
+            <div>
+                <a href="/index"><button>Zurück</button></a>
+                <a href="/logout"><button>Logout</button></a>
+            </div>
+        </nav>
+        <div class="container">    
             <h1>Eigene Schulden</h1>
-            
-            <table>
-                <thead>
-                    <tr>
-                        <th>Schuldner</th>
-                        <th>Gläubiger</th>
-                        <th>Betrag</th>
-                        <th>Datum</th>
-                        <th>Dringlichkeit</th>
-                        <th>Bezahlt?</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for eintrag in eintraege %}
+            <div class="tabelle-container">
+                <table>
+                    <thead>
                         <tr>
-                            <td>{{ eintrag["schuldner"] }}</td>
-                            <td>{{ eintrag["glaeubiger"] }}</td>
-                            <td>{{ eintrag["betrag"] }}</td>
-                            <td>{{ eintrag["datum"] }}</td>
-                            <td>{{ eintrag["dringlichkeit"] }}</td>
-                            <td>
-                                {% if eintrag["bezahlt"] %}
-                                    Ja
-                                {% else %}
-                                    <a href="/bezahlen/{{ eintrag['id'] }}"><button>Bezahlen</button></a>
-                                {% endif %}
-                            </td>
-                            <td><a href="/edit/{{ eintrag['id'] }}"><button>Bearbeiten</button></a></td>
+                            <th>Schuldner</th>
+                            <th>Gläubiger</th>
+                            <th>Betrag</th>
+                            <th>Datum</th>
+                            <th>Dringlichkeit</th>
+                            <th>Bezahlt?</th>
+                            <th> </th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <h2>Schulden hinzufügen</h2>
+                    </thead>
+                    <tbody>
+                        {% for eintrag in eintraege %}
+                            <tr>
+                                <td>{{ eintrag["schuldner"] }}</td>
+                                <td>{{ eintrag["glaeubiger"] }}</td>
+                                <td class="rechts">{{ "%.2f"|format(eintrag["betrag"])|replace(".", ",") }} €</td>
+                                <td>{% set t = eintrag["datum"].split("-") %}
+                                    {{ t[2] }}.{{ t[1] }}.{{ t[0] }}</td>
+                                <td>{{ eintrag["dringlichkeit"] }}</td>
+                                <td class="mitte">
+                                    {% if eintrag["bezahlt"] %}
+                                        Ja
+                                    {% else %}
+                                        <a href="/bezahlen/{{ eintrag['id'] }}"><button>Bezahlen</button></a>
+                                    {% endif %}
+                                </td>
+                                <td><a href="/edit/{{ eintrag['id'] }}"><button>Bearbeiten</button></a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <h2>Schuld hinzufügen</h2>
+            <div class="card">
                 <form action="/add" method="POST">
                     <input type="text" name="schuldner" value="{{ session['name'] }}" readonly>
                     <input type="text" name="glaeubiger" placeholder="Gläubiger" required>
                     <input type="number" name="betrag" step="0.01" placeholder="Betrag" min="0" required>
                     <input type="date" name="datum" required>
-                    <input type="number" name="dringlichkeit" min="1" max="5" required>
+                    <input type="number" name="dringlichkeit" min="1" max="5" placeholder="Dringlichkeit" required>
                     <button type="submit">Hinzufügen</button>
                 </form>
                 {% if fehler %}
                     <p style="color: red;">{{ fehler }}</p>
                 {% endif %}
-        </main>
+            </div>
+        </div>
     </body>
 </html>

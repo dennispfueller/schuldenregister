@@ -109,7 +109,7 @@ def add():
         dringlichkeit = int(request.form["dringlichkeit"])
         bezahlt = 0
 
-        if not schuldner or glaeubiger or betrag or datum or dringlichkeit:
+        if not (schuldner or glaeubiger or betrag or datum or dringlichkeit):
             return render_template("formular.html", eintraege=eintraege, fehler="Bitte alle Felder ausfüllen!")
         
         if betrag < 0:
