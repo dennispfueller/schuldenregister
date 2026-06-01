@@ -25,6 +25,9 @@ def register():
         user = conn.execute("SELECT * FROM user WHERE name = ?", (name,)).fetchone()
         
         if user is None:
+            if not password:
+                return render_template("login.html", fehler="Bitte Passwort eingeben!", name=name)
+    
             if password != repeated_password:
                 return render_template("register.html", fehler="Passwörter stimmen nicht überein!", name=name)
             
@@ -38,7 +41,7 @@ def register():
             session["name"] = name
             return redirect(url_for("index"))
         else:
-            return render_template("login.html", name=name)
+            return render_template("register.html", name=name, fehler="Name bereits vergeben")
     
     return render_template("register.html")
 
@@ -48,6 +51,9 @@ def login():
     if request.method == "POST":
         name = request.form["user"].rstrip().lstrip()
         password = request.form["password"]
+
+        if not password:
+            return render_template("login.html", fehler="Bitte Passwort eingeben!", name=name)
 
         user = conn.execute("SELECT * FROM user WHERE name = ?", (name,)).fetchone()
         
@@ -79,25 +85,6 @@ def index():
 
 @app.route("/add", methods=["POST", "GET"])
 def add():
-    if request.method == "POST":
-        schuldner = request.form["schuldner"]
-        glaeubiger = request.form["glaeubiger"]
-        betrag = float(request.form["betrag"])
-        datum = request.form["datum"]
-        dringlichkeit = int(request.form["dringlichkeit"])
-        bezahlt = 0
-
-        conn = get_db("schulden")
-        conn.execute("""
-            INSERT INTO schulden (schuldner, glaeubiger, betrag, datum, dringlichkeit, bezahlt)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (schuldner, glaeubiger, betrag, datum, dringlichkeit, bezahlt))
-
-        conn.commit()
-        conn.close()
-
-        return redirect(url_for("index"))
-
     if check_admin():
         conn = get_db("schulden")
         eintraege = conn.execute("""
@@ -114,17 +101,73 @@ def add():
         """, (session["name"],)).fetchall()
         conn.close()
 
+    if request.method == "POST":
+        schuldner = request.form["schuldner"]
+        glaeubiger = request.form["glaeubiger"]
+        betrag = float(request.form["betrag"])
+        datum = request.form["datum"]
+        dringlichkeit = int(request.form["dringlichkeit"])
+        bezahlt = 0
+
+        if not schuldner or glaeubiger or betrag or datum or dringlichkeit:
+            return render_template("formular.html", eintraege=eintraege, fehler="Bitte alle Felder ausfüllen!")
+        
+        if betrag < 0:
+            return render_template("fornular.html", eintraege=eintraege, fehler="Betrag kann nicht negativ sein!")
+        
+        if (dringlichkeit < 1) or (dringlichkeit > 5):
+            return render_template("formular.html", eintraege=eintraege, fehler="Dringlichkeit muss zwischen 1 und 5 liegen!")
+
+        conn = get_db("schulden")
+        conn.execute("""
+            INSERT INTO schulden (schuldner, glaeubiger, betrag, datum, dringlichkeit, bezahlt)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (schuldner, glaeubiger, betrag, datum, dringlichkeit, bezahlt))
+
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for("index"))
+
     return render_template("formular.html", eintraege=eintraege)
+
+@app.route("/bezahlen/<int:id>", methods=["GET"])
+def bezahlen(id):
+    conn = get_db("schulden")
+    conn.execute("UPDATE schulden SET bezahlt = 1 WHERE id = ?", (id,))
+    conn.commit()
+    conn.close()
+    
+    return redirect(url_for("add"))
 
 @app.route("/edit/<int:id>", methods=["GET", "POST"])
 def edit(id):
     conn = get_db("schulden")
+        
+    eintraege = conn.execute("""
+        SELECT schuldner, glaeubiger, betrag, datum, dringlichkeit, id
+        FROM schulden 
+        WHERE id = ?
+    """, (id,)).fetchone()
+    conn.close()
 
     if request.method == "POST":
         glaeubiger = request.form["glaeubiger"]
         betrag = float(request.form["betrag"])
         datum = request.form["datum"]
         dringlichkeit = int(request.form["dringlichkeit"])
+
+        if (eintraege["schuldner"] != session["name"]) and not check_admin():
+            return render_template("formular.html", eintraege=eintraege, fehler="Schuldner entspricht nicht dem Nutzer!")
+
+        if not glaeubiger or betrag or datum or dringlichkeit:
+            return render_template("formular.html", eintraege=eintraege, fehler="Bitte alle Felder ausfüllen!")
+        
+        if betrag < 0:
+            return render_template("fornular.html", eintraege=eintraege, fehler="Betrag kann nicht negativ sein!")
+        
+        if (dringlichkeit < 1) or (dringlichkeit > 5):
+            return render_template("formular.html", eintraege=eintraege, fehler="Dringlichkeit muss zwischen 1 und 5 liegen!")
 
         conn.execute("""
             UPDATE schulden 
@@ -134,13 +177,6 @@ def edit(id):
         conn.commit()
         conn.close()
         return redirect(url_for("add"))
-    
-    eintraege = conn.execute("""
-        SELECT glaeubiger, betrag, datum, dringlichkeit, id
-        FROM schulden 
-        WHERE id = ?
-    """, (id,)).fetchone()
-    conn.close()
     
     return render_template("edit.html", eintraege=eintraege)
 
@@ -154,7 +190,6 @@ def check_admin():
     """, (session["name"],)).fetchone()
     conn.close()
 
-    print(admin_status)
     return admin_status["is_admin"]
 
 @app.route("/leaderboard", methods=["GET"])

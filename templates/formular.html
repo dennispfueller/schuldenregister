@@ -34,7 +34,7 @@
                                 {% if eintrag["bezahlt"] %}
                                     Ja
                                 {% else %}
-                                    Nein
+                                    <a href="/bezahlen/{{ eintrag['id'] }}"><button>Bezahlen</button></a>
                                 {% endif %}
                             </td>
                             <td><a href="/edit/{{ eintrag['id'] }}"><button>Bearbeiten</button></a></td>
@@ -51,6 +51,9 @@
                     <input type="number" name="dringlichkeit" min="1" max="5" required>
                     <button type="submit">Hinzufügen</button>
                 </form>
+                {% if fehler %}
+                    <p style="color: red;">{{ fehler }}</p>
+                {% endif %}
         </main>
     </body>
 </html>
