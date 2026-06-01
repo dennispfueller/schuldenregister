@@ -1,6 +1,8 @@
 import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
+from init_db import init_db
+
 
 app = Flask(__name__)
 app.secret_key = "superstarkespasswort"
@@ -216,6 +218,8 @@ def leaderboard():
 
     conn.close()
     return render_template("leaderboard.html", eintraege=eintraege, grouped_by=grouped_by, current_lb=current_lb)
+
+init_db()
 
 if __name__ == "__main__":
     app.run(debug=True)
