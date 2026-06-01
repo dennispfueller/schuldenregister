@@ -33,8 +33,9 @@
                             <tr>
                                 <td>{{ eintrag["schuldner"] }}</td>
                                 <td>{{ eintrag["glaeubiger"] }}</td>
-                                <td>{{ eintrag["betrag"] }}</td>
-                                <td>{{ eintrag["datum"] }}</td>
+                                <td class="rechts">{{ "%.2f"|format(eintrag["betrag"])|replace(".", ",") }} €</td>
+                                <td>{% set t = eintrag["datum"].split("-") %}
+                                    {{ t[2] }}.{{ t[1] }}.{{ t[0] }}</td>
                                 <td>{{ eintrag["dringlichkeit"] }}</td>
                             </tr>
                         {% endfor %}
